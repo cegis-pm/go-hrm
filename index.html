@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoHRM Stack — Integrated Technology Hub</title>
+
+  <style>
+    /* ── Brand colour tokens pulled from index.html ── */
+    :root {
+      --blue: #016796;
+      --green: #3c9052;
+      --red: #9e2f17;
+      --yellow: #d3a518;
+      --bg: #f4f6f8;
+      --white: #fff;
+      --text: #1a1a1a;
+      --mid: #555;
+      --border: #dfe0df;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+
+    /* ── Reset: remove default browser spacing ── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Page takes full viewport height and stacks header / content / footer ── */
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ════════════════════════════════════════
+       HEADER  — copied from index.html style
+    ════════════════════════════════════════ */
+    .site-header {
+      background: var(--white);
+      border-bottom: 2px solid var(--border);
+      padding: 13px clamp(12px, 4vw, 30px);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* ── Logo SVG sizing ── */
+    .site-header svg.cegis-logo {
+      height: 38px;
+      width: auto;
+    }
+
+    /* ── Title and subtitle inside the header ── */
+    .site-header h1 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: -0.01em;
+    }
+
+    .site-header p {
+      font-size: 0.72rem;
+      color: var(--mid);
+      margin-top: 1px;
+    }
+
+    /* ── Pushes Sign In button to the far right ── */
+    .header-spacer { flex: 1; }
+
+    /* ── Sign in button in header ── */
+    .signin-btn {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-family: var(--font);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: opacity 0.15s;
+    }
+
+    .signin-btn:hover { opacity: 0.85; }
+
+    /* ════════════════════════════════════════
+       FOOTER  — copied from index.html style
+    ════════════════════════════════════════ */
+    .site-footer {
+      flex-shrink: 0;
+      background: var(--white);
+      border-top: 2px solid var(--border);
+      text-align: center;
+      padding: 8px 20px;
+      font-size: 0.72rem;
+      color: var(--mid);
+      z-index: 100;
+    }
+
+    .site-footer a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* ════════════════════════════════════════
+       MAIN CONTENT WRAPPER
+    ════════════════════════════════════════ */
+    .main-wrap {
+      flex: 1;
+      padding: clamp(16px, 3vw, 32px);
+      overflow-y: auto;
+    }
+
+    /* ── Caps page at 1280px and centres it ── */
+    .tool-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ════════════════════════════════════════
+       HERO BANNER
+    ════════════════════════════════════════ */
+    .hero {
+      background: linear-gradient(135deg, var(--blue) 0%, #014e72 100%);
+      color: white;
+      padding: 42px 32px 36px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .hero h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      font-size: 0.92rem;
+      opacity: 0.92;
+      max-width: 760px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════
+       GOHRM FLOW BANNER
+    ════════════════════════════════════════ */
+    .gohrm-flow {
+      background: var(--white);
+      border: 1px solid #e4e4e4;
+      padding: 22px clamp(18px, 3vw, 28px);
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+
+    .gohrm-flow-label {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--mid);
+      margin-bottom: 14px;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* ── Flex row of steps with arrows between them ── */
+    .gohrm-flow-steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .gohrm-flow-step {
+      flex: 1;
+      min-width: 130px;
+      color: white;
+      padding: 12px 8px;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.01em;
+    }
+
+    .gohrm-flow-arrow { color: #cbd5e1; font-size: 1.1rem; }
+
+    .gohrm-flow-foot {
+      text-align: center;
+      font-size: 0.76rem;
+      color: var(--mid);
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    /* ════════════════════════════════════════
+       SECTION HEADERS (numbered blocks)
+    ════════════════════════════════════════ */
+    .gohrm-section { margin-bottom: 28px; }
+
+    .gohrm-section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: var(--white);
+      border: 1px solid #e4e4e4;
+      border-left: 5px solid;
+      border-radius: 4px;
+    }
+
+    /* ── Coloured circle with the section number ── */
+    .gohrm-section-num {
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .gohrm-section-header h2 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .gohrm-section-header .desc {
+      font-size: 0.76rem;
+      color: var(--mid);
+      margin-top: 2px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* ════════════════════════════════════════
+       PMDT FEATURED CARD  (tool 1 — entry point)
+    ════════════════════════════════════════ */
+    .pmdt-card {
+      background: linear-gradient(135deg, #fffbf0 0%, #fff5d9 100%);
+      border: 1px solid var(--yellow);
+      border-left: 5px solid var(--yellow);
+      padding: 22px clamp(20px, 3vw, 28px);
+      border-radius: 4px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+    }
+
+    /* ── Only hover if the card has an active link ── */
+    .pmdt-card.is-live {
+      cursor: pointer;
+    }
+
+    .pmdt-card.is-live:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 22px rgba(1, 103, 150, 0.12);
+    }
+
+    .pmdt-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: #8a6a0a;
+      font-weight: 700;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .pmdt-card h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--blue);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pmdt-card p {
+      margin: 6px 0 0 0;
+      font-size: 0.82rem;
+      color: var(--mid);
+    }
+
+    /* ── Launch button shown only when the tool is live ── */
+    .pmdt-launch {
+      background: var(--blue);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    /* ════════════════════════════════════════
+       CARD GRIDS
+    ════════════════════════════════════════ */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── Slightly tighter grid for subsections ── */
+    .card-grid.tight {
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 10px;
+    }
+
+    /* ════════════════════════════════════════
+       TOOL CARDS
+    ════════════════════════════════════════ */
+    .tool-card {
+      background: var(--white);
+      border: 1px solid #e4e4e4;
+      border-top: 3px solid;
+      padding: 14px 14px 12px;
+      border-radius: 3px;
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 88px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ── Clickable card, shown when status is live and link is set ── */
+    .tool-card.is-live {
+      cursor: pointer;
+    }
+
+    .tool-card.is-live:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 22px rgba(1, 103, 150, 0.14);
+    }
+
+    /* ── Non-clickable card, any status other than live ── */
+    .tool-card.not-live {
+      cursor: default;
+      opacity: 0.82;
+      background: #fafafa;
+    }
+
+    /* ── Small tool number e.g. "2.1" ── */
+    .tool-card .tool-num {
+      font-size: 0.66rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Tool name text ── */
+    .tool-card .tool-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 6px;
+      flex-grow: 1;
+    }
+
+    /* ── Arrow icon shown only on live cards, top-right corner ── */
+    .tool-card .open-icon {
+      position: absolute;
+      top: 11px;
+      right: 11px;
+      width: 18px;
+      height: 18px;
+      color: #aaa;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    .tool-card.is-live:hover .open-icon {
+      color: var(--blue);
+      transform: translate(2px, -2px);
+    }
+
+    /* ════════════════════════════════════════
+       STATUS TAG SYSTEM
+       To change a product's status: update the
+       "status" field in the JS tools data below.
+       Valid values: ideation | planning | development | testing | live
+    ════════════════════════════════════════ */
+
+    /* ── Base tag style shared by all statuses ── */
+    .status-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      align-self: flex-start;
+      margin-top: 2px;
+      border: 1px solid;
+    }
+
+    /* ideation — light purple/grey, earliest stage */
+    .tag-ideation {
+      background: #f3f0ff;
+      color: #5b3db5;
+      border-color: #c5b8f0;
+    }
+
+    /* planning — blue tint, under review or being scoped */
+    .tag-planning {
+      background: #e8f4fb;
+      color: #015e87;
+      border-color: #9ed0eb;
+    }
+
+    /* development — amber/yellow, actively being built */
+    .tag-development {
+      background: #fff3cd;
+      color: #856404;
+      border-color: #f5d76e;
+    }
+
+    /* testing — orange, in QA or user testing */
+    .tag-testing {
+      background: #fff0e6;
+      color: #a04e00;
+      border-color: #f5c49a;
+    }
+
+    /* live — green, shipped and in production */
+    .tag-live {
+      background: #d4f5e2;
+      color: #1a6b3a;
+      border-color: #7de0a8;
+    }
+
+    /* ════════════════════════════════════════
+       STREAM COLOURS (one colour per section)
+    ════════════════════════════════════════ */
+
+    /* Section 2: CBR — personnel blue */
+    .stream-cbr .gohrm-section-header { border-left-color: #2c7da0; }
+    .stream-cbr .gohrm-section-num    { background: #2c7da0; }
+    .stream-cbr .tool-card            { border-top-color: #2c7da0; }
+    .stream-cbr .tool-card .tool-num  { color: #2c7da0; }
+
+    /* Section 3: L&D — navy */
+    .stream-ld .gohrm-section-header  { border-left-color: #1e3a5f; }
+    .stream-ld .gohrm-section-num     { background: #1e3a5f; }
+
+    /* Section 4: PMS — maroon */
+    .stream-pms .gohrm-section-header { border-left-color: #8b3a3a; }
+    .stream-pms .gohrm-section-num    { background: #8b3a3a; }
+    .stream-pms .tool-card            { border-top-color: #8b3a3a; }
+    .stream-pms .tool-card .tool-num  { color: #8b3a3a; }
+
+    /* ════════════════════════════════════════
+       L&D SUBSECTIONS (3.1, 3.2, 3.3)
+    ════════════════════════════════════════ */
+    .subsection {
+      background: var(--white);
+      padding: 18px 22px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+      border: 1px solid #e4e4e4;
+    }
+
+    .subsection-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .subsection-badge {
+      color: white;
+      padding: 3px 10px;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .subsection-header h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .subsection-header .subdesc {
+      font-size: 0.76rem;
+      color: var(--mid);
+      font-style: italic;
+    }
+
+    /* 3.1 Demand Side — navy background tint */
+    .demand                        { background: #f0f4fa; }
+    .demand .subsection-badge      { background: #1e3a5f; }
+    .demand h3                     { color: #1e3a5f; }
+    .demand .tool-card             { border-top-color: #1e3a5f; background: white; }
+    .demand .tool-card .tool-num   { color: #1e3a5f; }
+
+    /* 3.2 Assessments — orange/rust background tint */
+    .assessment                        { background: #fff7ed; }
+    .assessment .subsection-badge      { background: #c97b3c; }
+    .assessment h3                     { color: #c97b3c; }
+    .assessment .tool-card             { border-top-color: #c97b3c; background: white; }
+    .assessment .tool-card .tool-num   { color: #c97b3c; }
+
+    /* 3.3 Supply Side — green background tint */
+    .supply                        { background: #f0fdf4; }
+    .supply .subsection-badge      { background: #4a9d7c; }
+    .supply h3                     { color: #4a9d7c; }
+    .supply .tool-card             { border-top-color: #4a9d7c; background: white; }
+    .supply .tool-card .tool-num   { color: #4a9d7c; }
+
+    /* ── Nested block used inside 3.3 (individual vs org level) ── */
+    .nested-block {
+      background: white;
+      padding: 14px 16px;
+      border-radius: 3px;
+      margin-bottom: 12px;
+      border: 1px dashed #4a9d7c;
+    }
+
+    .nested-block-title {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #4a9d7c;
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ════════════════════════════════════════
+       STATUS LEGEND  — shown near the top
+    ════════════════════════════════════════ */
+    .legend {
+      background: var(--white);
+      border: 1px solid #e4e4e4;
+      border-radius: 4px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      align-items: center;
+    }
+
+    .legend-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--mid);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      flex-basis: 100%;
+      margin-bottom: 2px;
+    }
+
+    /* ════════════════════════════════════════
+       MOBILE ADJUSTMENTS
+    ════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .hero h2                { font-size: 1.25rem; }
+      .gohrm-flow-arrow       { display: none; }
+      .gohrm-flow-step        { min-width: 100%; }
+      .legend-label           { flex-basis: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     HEADER  — structure from gohrm-portal-wireframe.html
+              colour/style from index.html
+════════════════════════════════════════ -->
+<header class="site-header">
+  <!-- CEGIS SVG logo: outer blue C ring + inner green G ring -->
+  <svg class="cegis-logo" viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 50 8 A 42 42 0 1 0 92 50 L 78 50 A 28 28 0 1 1 50 22 Z" fill="#1e7fb8"/>
+    <path d="M 50 22 A 28 28 0 1 0 78 50 L 64 50 A 14 14 0 1 1 50 36 Z" fill="#3c9052"/>
+    <rect x="50" y="47" width="16" height="6" fill="#3c9052"/>
+    <text x="108" y="72" font-family="Helvetica, Arial, sans-serif" font-weight="800" font-size="62" fill="#1e7fb8" letter-spacing="-1">CEGIS</text>
+  </svg>
+
+  <!-- Page title and subtitle -->
+  <div>
+    <h1>GoHRM Stack: Integrated Technology Hub</h1>
+    <p>Centre for Effective Governance of Indian States</p>
+  </div>
+
+  <!-- Spacer pushes Sign In to the right edge -->
+  <div class="header-spacer"></div>
+  <button class="signin-btn">Sign In</button>
+</header>
+
+<!-- ════════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════ -->
+<div class="main-wrap">
+  <div class="tool-wrap">
+
+    <!-- Hero banner -->
+    <section class="hero">
+      <h2>Goal-oriented Human Resource Management</h2>
+      <p>Connecting goals, competencies, learning &amp; performance — a unified suite of solutions for competency-driven governance reform.</p>
+    </section>
+
+    <!-- GoHRM continuous improvement cycle flow diagram -->
+    <section class="gohrm-flow">
+      <div class="gohrm-flow-label">The GoHRM Continuous Improvement Cycle</div>
+      <div class="gohrm-flow-steps">
+        <div class="gohrm-flow-step" style="background:#2c7da0;">Goal Setting</div>
+        <div class="gohrm-flow-arrow">&#8594;</div>
+        <div class="gohrm-flow-step" style="background:#1e3a5f;">Role &amp; Competency Map</div>
+        <div class="gohrm-flow-arrow">&#8594;</div>
+        <div class="gohrm-flow-step" style="background:#c97b3c;">Assessment</div>
+        <div class="gohrm-flow-arrow">&#8594;</div>
+        <div class="gohrm-flow-step" style="background:#4a9d7c;">Targeted Learning</div>
+        <div class="gohrm-flow-arrow">&#8594;</div>
+        <div class="gohrm-flow-step" style="background:#8b3a3a;">Performance Management</div>
+      </div>
+      <div class="gohrm-flow-foot">Institutionalised by the Capacity Building Unit (CBU)</div>
+    </section>
+
+    <!-- Status legend so readers know what each tag colour means -->
+    <div class="legend">
+      <span class="legend-label">Status key:</span>
+      <span class="status-tag tag-ideation">Ideation</span>
+      <span class="status-tag tag-planning">Planning</span>
+      <span class="status-tag tag-development">Development</span>
+      <span class="status-tag tag-testing">Testing</span>
+      <span class="status-tag tag-live">Live</span>
+    </div>
+
+    <!-- PMDT featured card rendered by JS below -->
+    <div id="pmdt-card-wrap"></div>
+
+    <!-- ════════════════════════════════════════
+         SECTION 2: CBR
+    ════════════════════════════════════════ -->
+    <section class="gohrm-section stream-cbr">
+      <div class="gohrm-section-header">
+        <div class="gohrm-section-num">2</div>
+        <div>
+          <h2>Competency-Based Recruitment (CBR)</h2>
+          <div class="desc">Pre-recruitment, recruitment, and post-recruitment tools for competency-aligned hiring</div>
+        </div>
+      </div>
+      <!-- JS fills this grid with tool cards -->
+      <div class="card-grid" id="cbr-grid"></div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         SECTION 3: L&D
+    ════════════════════════════════════════ -->
+    <section class="gohrm-section stream-ld">
+      <div class="gohrm-section-header">
+        <div class="gohrm-section-num">3</div>
+        <div>
+          <h2>Competency-Based Capacity Building (L&amp;D)</h2>
+          <div class="desc">Demand-side mapping, competency assessments, and supply-side learning solutions</div>
+        </div>
+      </div>
+
+      <!-- 3.1 Demand Side -->
+      <div class="subsection demand">
+        <div class="subsection-header">
+          <span class="subsection-badge">3.1</span>
+          <h3>Competency Demand-Side Solutions</h3>
+          <span class="subdesc">— Mapping roles, activities &amp; competencies (FRAC)</span>
+        </div>
+        <div class="card-grid tight" id="demand-grid"></div>
+      </div>
+
+      <!-- 3.2 Assessments -->
+      <div class="subsection assessment">
+        <div class="subsection-header">
+          <span class="subsection-badge">3.2</span>
+          <h3>Competency Assessments</h3>
+          <span class="subdesc">— Identifying gaps between required &amp; current proficiency</span>
+        </div>
+        <div class="card-grid tight" id="assessment-grid"></div>
+      </div>
+
+      <!-- 3.3 Supply Side -->
+      <div class="subsection supply">
+        <div class="subsection-header">
+          <span class="subsection-badge">3.3</span>
+          <h3>Competency Supply-Side Solutions</h3>
+          <span class="subdesc">— Content development, curation &amp; learning institutions</span>
+        </div>
+
+        <!-- 3.3.1 Individual level -->
+        <div class="nested-block">
+          <div class="nested-block-title">3.3.1 · Individual Level</div>
+          <div class="card-grid tight" id="supply-ind-grid"></div>
+        </div>
+
+        <!-- 3.3.2 Organisational level -->
+        <div class="nested-block">
+          <div class="nested-block-title">3.3.2 · Organisational Level</div>
+          <div class="card-grid tight" id="supply-org-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         SECTION 4: PMS
+    ════════════════════════════════════════ -->
+    <section class="gohrm-section stream-pms">
+      <div class="gohrm-section-header">
+        <div class="gohrm-section-num">4</div>
+        <div>
+          <h2>Goal Setting &amp; Performance Management (PMS)</h2>
+          <div class="desc">Linking departmental goals to individual performance via APAR and HRMIS</div>
+        </div>
+      </div>
+      <div class="card-grid" id="pms-grid"></div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     FOOTER  — from index.html
+════════════════════════════════════════ -->
+<footer class="site-footer">
+  Designed and developed by the
+  <a href="https://cegis.org/" target="_blank">CEGIS Foundation</a>
+  &nbsp;&middot;&nbsp; GoHRM Stack: Integrated Technology Hub v0.1 &nbsp;&middot;&nbsp; Updated May 2026
+</footer>
+
+<script>
+  /* ════════════════════════════════════════
+     TOOL DATA
+     ────────────────────────────────────────
+     HOW TO EDIT:
+     - To add a tool: add a new object { num, name, status, link } to the right array.
+     - To remove a tool: delete its object from the array.
+     - To add a link: replace "" in "link" with the real URL e.g. "https://example.com"
+     - To change status: use one of: ideation | planning | development | testing | live
+     ════════════════════════════════════════ */
+
+  // Tool 1: PMDT standalone featured card (not part of a grid)
+  var pmdt = {
+    num:    '1',
+    name:   'PMDT — Personnel Management Diagnostic Toolkit',
+    desc:   'Establish the baseline for your department and identify which GoHRM interventions are right for you.',
+    status: 'live',
+    link:   '' // LINK PLACEHOLDER — replace "" with the real URL when ready
+  };
+
+  // Section 2: Competency-Based Recruitment tools
+  var tools = {
+    cbr: [
+      { num: '2.1', name: 'JD Drafter',                  status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '2.2', name: 'JD Screener',                  status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '2.3', name: 'Assignment Evaluator',          status: 'ideation',    link: '' }, // LINK PLACEHOLDER
+      { num: '2.4', name: 'Staffing & Vacancy Analyser',   status: 'testing',     link: '' }, // LINK PLACEHOLDER
+      { num: '2.5', name: 'Mentza JD Developer',           status: 'planning',    link: '' }, // LINK PLACEHOLDER
+      { num: '2.6', name: 'Mentza AI Interviewer',         status: 'ideation',    link: '' }  // LINK PLACEHOLDER
+    ],
+
+    // Section 3.1: Demand-side tools
+    demand: [
+      { num: '3.1.1', name: 'Key Position Identifier',     status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '3.1.2', name: 'Work Allocation Generator',   status: 'ideation',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.1.3', name: 'entomo PRAC Generator',       status: 'planning',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.1.4', name: 'PRAC Reviewer',               status: 'planning',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.1.5', name: 'KCM Competency Drafter',      status: 'ideation',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.1.6', name: 'Domain Competency Drafter',   status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '3.1.7', name: 'Competency Reviewer',         status: 'ideation',    link: '' }  // LINK PLACEHOLDER
+    ],
+
+    // Section 3.2: Assessment tools
+    assessment: [
+      { num: '3.2.1', name: 'Assessment Administrator',              status: 'testing',     link: '' }, // LINK PLACEHOLDER
+      { num: '3.2.2', name: 'End of Course Assessment Generator',    status: 'ideation',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.2.3', name: 'End of Program Assessment Generator',   status: 'ideation',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.2.4', name: 'Standalone Competency Generator',       status: 'planning',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.2.5', name: 'Integrated Competency Generator',       status: 'planning',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.2.6', name: 'iGOT QB — CSV Generator',              status: 'ideation',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.2.7', name: 'WPCAs Generator & Administrator',       status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '3.2.8', name: 'Assessment Evaluator & Reporter',       status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '3.2.9', name: 'entomo Assessment Generator',           status: 'ideation',    link: '' }  // LINK PLACEHOLDER
+    ],
+
+    // Section 3.3.1: Supply-side individual tools
+    supplyInd: [
+      { num: '3.3.1.1', name: 'Learning Pathway Creator',      status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '3.3.1.2', name: 'Learning Objectives Builder',   status: 'ideation',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.3.1.3', name: 'Course — Competency Tagger',    status: 'planning',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.3.1.4', name: 'Micro Course Generator',        status: 'ideation',    link: '' }  // LINK PLACEHOLDER
+    ],
+
+    // Section 3.3.2: Supply-side organisational tools
+    supplyOrg: [
+      { num: '3.3.2.1', name: 'NSCSTI Resource Microsite',   status: 'planning',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.3.2.2', name: 'NSCSTI Ranking Indicator',    status: 'ideation',    link: '' }, // LINK PLACEHOLDER
+      { num: '3.3.2.3', name: 'ACBP Generator',              status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '3.3.2.4', name: 'Basic LMS Package',           status: 'testing',     link: '' }, // LINK PLACEHOLDER
+      { num: '3.3.2.5', name: 'Knowledge Hub Package',       status: 'development', link: '' }  // LINK PLACEHOLDER
+    ],
+
+    // Section 4: Performance Management tools
+    pms: [
+      { num: '4.1', name: 'OKR Generator',              status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '4.2', name: 'Departmental KPI Generator',  status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '4.3', name: 'Individual KPI Generator',    status: 'testing',     link: '' }, // LINK PLACEHOLDER
+      { num: '4.4', name: 'PMS Dashboard Package',       status: 'development', link: '' }, // LINK PLACEHOLDER
+      { num: '4.5', name: 'HRMIS Data Analyser',         status: 'development', link: '' }  // LINK PLACEHOLDER
+    ]
+  };
+
+  /* ════════════════════════════════════════
+     HELPER: human-readable label for each status value
+  ════════════════════════════════════════ */
+  function statusLabel(status) {
+    var labels = {
+      ideation:    'Ideation',
+      planning:    'Planning',
+      development: 'Development',
+      testing:     'Testing',
+      live:        'Live'
+    };
+    // Return the matching label or fall back to the raw status string
+    return labels[status] || status;
+  }
+
+  /* ════════════════════════════════════════
+     RENDER: one standard tool card
+     tool — a single object from the tools arrays above
+  ════════════════════════════════════════ */
+  function renderCard(tool) {
+    // A card is only interactive when it is live AND has a real URL
+    var isLive = tool.status === 'live' && tool.link !== '';
+
+    // Pick CSS class: is-live gets hover effects, not-live is dimmed and static
+    var cardClass = 'tool-card ' + (isLive ? 'is-live' : 'not-live');
+
+    // Use <a> for clickable cards so the browser handles navigation correctly
+    var tagOpen  = isLive
+      ? '<a class="' + cardClass + '" href="' + tool.link + '" target="_blank">'
+      : '<div class="' + cardClass + '">';
+    var tagClose = isLive ? '</a>' : '</div>';
+
+    // Arrow icon in the top-right corner signals the card can be opened
+    var arrowIcon = isLive
+      ? '<svg class="open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>'
+      : '';
+
+    // Status tag shows the current phase of development
+    var tag = '<span class="status-tag tag-' + tool.status + '">' + statusLabel(tool.status) + '</span>';
+
+    return tagOpen +
+      arrowIcon +
+      '<div class="tool-num">' + tool.num + '</div>' +
+      '<div class="tool-name">' + tool.name + '</div>' +
+      tag +
+      tagClose;
+  }
+
+  /* ════════════════════════════════════════
+     RENDER: populate a grid div with cards
+     elementId — id of the target container div
+     toolList  — the array of tool objects to render
+  ════════════════════════════════════════ */
+  function renderGrid(elementId, toolList) {
+    var el = document.getElementById(elementId);
+    if (!el) return; // stop if the element does not exist in the page
+    el.innerHTML = toolList.map(renderCard).join('');
+  }
+
+  /* ════════════════════════════════════════
+     RENDER: the PMDT featured card (tool 1)
+     Larger standalone card above all sections
+  ════════════════════════════════════════ */
+  function renderPmdtCard() {
+    var isLive = pmdt.status === 'live' && pmdt.link !== '';
+
+    // Show Launch button when live, or the status tag otherwise
+    var launchOrTag = isLive
+      ? '<a class="pmdt-launch" href="' + pmdt.link + '" target="_blank">Launch PMDT <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>'
+      : '<span class="status-tag tag-' + pmdt.status + '">' + statusLabel(pmdt.status) + '</span>';
+
+    // Add is-live class only if the card is clickable
+    var cardClass = 'pmdt-card' + (isLive ? ' is-live' : '');
+
+    document.getElementById('pmdt-card-wrap').innerHTML =
+      '<div class="' + cardClass + '">' +
+        '<div style="flex:1;min-width:280px;">' +
+          '<div class="pmdt-label">Start here &middot; Diagnostic Entry Point</div>' +
+          '<h3>' + pmdt.num + '. ' + pmdt.name + '</h3>' +
+          '<p>' + pmdt.desc + '</p>' +
+        '</div>' +
+        launchOrTag +
+      '</div>';
+  }
+
+  // Kick off rendering of all cards when the page loads
+  renderPmdtCard();
+  renderGrid('cbr-grid',        tools.cbr);
+  renderGrid('demand-grid',     tools.demand);
+  renderGrid('assessment-grid', tools.assessment);
+  renderGrid('supply-ind-grid', tools.supplyInd);
+  renderGrid('supply-org-grid', tools.supplyOrg);
+  renderGrid('pms-grid',        tools.pms);
+</script>
+</body>
+</html>
