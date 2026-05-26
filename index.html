@@ -38,60 +38,26 @@
     }
 
     /* ════════════════════════════════════════
-       HEADER  — copied from index.html style
+       HEADER  — exact copy from index.html
     ════════════════════════════════════════ */
     .site-header {
-      background: var(--white);
-      border-bottom: 2px solid var(--border);
-      padding: 13px clamp(12px, 4vw, 30px);
+      background: #fff;
+      border-bottom: 2px solid #dfe0df;
+      padding: 13px clamp(12px,4vw,30px);
       display: flex;
       align-items: center;
       gap: 16px;
       flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
 
-    /* ── Logo SVG sizing ── */
-    .site-header svg.cegis-logo {
-      height: 38px;
-      width: auto;
-    }
+    /* ── Logo image sizing from index.html ── */
+    .site-header img { height: 38px; }
 
-    /* ── Title and subtitle inside the header ── */
-    .site-header h1 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--blue);
-      letter-spacing: -0.01em;
-    }
+    /* ── Title style from index.html ── */
+    .site-header h1 { font-size: 1rem; font-weight: 700; color: #016796; font-family: var(--font); letter-spacing: -0.01em; }
 
-    .site-header p {
-      font-size: 0.72rem;
-      color: var(--mid);
-      margin-top: 1px;
-    }
-
-    /* ── Pushes Sign In button to the far right ── */
-    .header-spacer { flex: 1; }
-
-    /* ── Sign in button in header ── */
-    .signin-btn {
-      background: var(--blue);
-      color: white;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 4px;
-      font-family: var(--font);
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: opacity 0.15s;
-    }
-
-    .signin-btn:hover { opacity: 0.85; }
+    /* ── Subtitle style from index.html ── */
+    .site-header p  { font-size: 0.72rem; color: var(--mid); margin-top: 1px; }
 
     /* ════════════════════════════════════════
        FOOTER  — copied from index.html style
@@ -468,6 +434,10 @@
        STREAM COLOURS (one colour per section)
     ════════════════════════════════════════ */
 
+    /* Section 1: PMDT — yellow/amber to match the featured card border */
+    .stream-pmdt .gohrm-section-header { border-left-color: var(--yellow); }
+    .stream-pmdt .gohrm-section-num    { background: var(--yellow); color: #1a1a1a; }
+
     /* Section 2: CBR — personnel blue */
     .stream-cbr .gohrm-section-header { border-left-color: #2c7da0; }
     .stream-cbr .gohrm-section-num    { background: #2c7da0; }
@@ -503,6 +473,7 @@
       flex-wrap: wrap;
     }
 
+    /* ── Subsection badge is a small pill, not a circle ── */
     .subsection-badge {
       color: white;
       padding: 3px 10px;
@@ -510,6 +481,7 @@
       font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.05em;
+      flex-shrink: 0;
     }
 
     .subsection-header h3 {
@@ -604,27 +576,15 @@
 <body>
 
 <!-- ════════════════════════════════════════
-     HEADER  — structure from gohrm-portal-wireframe.html
-              colour/style from index.html
+     HEADER  — exact copy from index.html
 ════════════════════════════════════════ -->
 <header class="site-header">
-  <!-- CEGIS SVG logo: outer blue C ring + inner green G ring -->
-  <img src="cegis_logo.png" alt="CEGIS" style="height:38px;width:auto;">
-    <path d="M 50 8 A 42 42 0 1 0 92 50 L 78 50 A 28 28 0 1 1 50 22 Z" fill="#1e7fb8"/>
-    <path d="M 50 22 A 28 28 0 1 0 78 50 L 64 50 A 14 14 0 1 1 50 36 Z" fill="#3c9052"/>
-    <rect x="50" y="47" width="16" height="6" fill="#3c9052"/>
-    <text x="108" y="72" font-family="Helvetica, Arial, sans-serif" font-weight="800" font-size="62" fill="#1e7fb8" letter-spacing="-1">CEGIS</text>
-  </svg>
-
-  <!-- Page title and subtitle -->
+  <!-- onerror hides the img tag if the file is missing, same as index.html -->
+  <img src="cegis_logo.png" alt="CEGIS" onerror="this.style.display='none'">
   <div>
     <h1>GoHRM Stack: Integrated Technology Hub</h1>
     <p>Centre for Effective Governance of Indian States</p>
   </div>
-
-  <!-- Spacer pushes Sign In to the right edge -->
-  <div class="header-spacer"></div>
-  <button class="signin-btn">Sign In</button>
 </header>
 
 <!-- ════════════════════════════════════════
@@ -756,12 +716,13 @@
 </div>
 
 <!-- ════════════════════════════════════════
-     FOOTER  — from index.html
+     FOOTER  — exact copy from index.html
 ════════════════════════════════════════ -->
-<footer class="site-footer">
-  Designed and developed by the
-  <a href="https://cegis.org/" target="_blank">CEGIS Foundation</a>
-  &nbsp;&middot;&nbsp; GoHRM Stack: Integrated Technology Hub v0.1 &nbsp;&middot;&nbsp; Updated May 2026
+<footer style="flex-shrink:0;background:#fff;border-top:2px solid #dfe0df;
+  text-align:center;padding:8px 20px;font-size:0.72rem;color:#555;z-index:100;">
+  Designed and developed by the <a href="https://cegis.org" target="_blank"
+    style="color:#016796;font-weight:600;text-decoration:none;">CEGIS Foundation</a>
+  &nbsp;&middot;&nbsp; GoHRM Stack v0.1 &nbsp;&middot;&nbsp; Updated 26 May 2026
 </footer>
 
 <script>
@@ -920,15 +881,28 @@
     // Add is-live class only if the card is clickable
     var cardClass = 'pmdt-card' + (isLive ? ' is-live' : '');
 
-    document.getElementById('pmdt-card-wrap').innerHTML =
+    // Section header row uses the same .gohrm-section-header pattern as sections 2, 3, 4
+    var sectionHeader =
+      '<div class="gohrm-section stream-pmdt">' +
+        '<div class="gohrm-section-header">' +
+          '<div class="gohrm-section-num">' + pmdt.num + '</div>' +
+          '<div>' +
+            '<h2>' + pmdt.name + '</h2>' +
+            '<div class="desc">Start here &middot; Diagnostic Entry Point</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    // Card body sits below the section header, same as before
+    var cardBody =
       '<div class="' + cardClass + '">' +
         '<div style="flex:1;min-width:280px;">' +
-          '<div class="pmdt-label">Start here &middot; Diagnostic Entry Point</div>' +
-          '<h3>' + pmdt.num + '. ' + pmdt.name + '</h3>' +
           '<p>' + pmdt.desc + '</p>' +
         '</div>' +
         launchOrTag +
       '</div>';
+
+    document.getElementById('pmdt-card-wrap').innerHTML = sectionHeader + cardBody;
   }
 
   // Kick off rendering of all cards when the page loads
