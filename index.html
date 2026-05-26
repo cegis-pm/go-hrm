@@ -176,8 +176,6 @@
     /* ════════════════════════════════════════
        SECTION HEADERS (numbered blocks)
     ════════════════════════════════════════ */
-    .gohrm-section { margin-bottom: 28px; }
-
     .gohrm-section-header {
       display: flex;
       align-items: center;
@@ -186,7 +184,6 @@
       padding: 10px 14px;
       background: var(--white);
       border: 1px solid #e4e4e4;
-      border-left: 5px solid;
       border-radius: 4px;
     }
 
@@ -222,57 +219,39 @@
     }
 
     /* ════════════════════════════════════════
-       PMDT FEATURED CARD  (tool 1 — entry point)
+       DASHED SECTION BOX
+       Wraps the section header + content together for all main sections
     ════════════════════════════════════════ */
-    .pmdt-card {
-      background: linear-gradient(135deg, #fffbf0 0%, #fff5d9 100%);
-      border: 1px solid var(--yellow);
-      border-left: 5px solid var(--yellow);
-      padding: 22px clamp(20px, 3vw, 28px);
-      border-radius: 4px;
-      margin-bottom: 24px;
+    .gohrm-section {
+      border: 2px dashed #c8cdd2;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Section header inside the dashed box ── */
+    .gohrm-section .gohrm-section-header {
+      margin-bottom: 14px;
+    }
+
+    /* ════════════════════════════════════════
+       PMDT BODY  (desc + status/launch inside the dashed box)
+    ════════════════════════════════════════ */
+    .pmdt-body {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      position: relative;
+      padding: 4px 0;
     }
 
-    /* ── Only hover if the card has an active link ── */
-    .pmdt-card.is-live {
-      cursor: pointer;
-    }
-
-    .pmdt-card.is-live:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 22px rgba(1, 103, 150, 0.12);
-    }
-
-    .pmdt-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
-      color: #8a6a0a;
-      font-weight: 700;
-      margin-bottom: 5px;
-      text-transform: uppercase;
-    }
-
-    .pmdt-card h3 {
-      margin: 0;
-      font-size: 1.05rem;
-      color: var(--blue);
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pmdt-card p {
-      margin: 6px 0 0 0;
+    /* ── Description text inside pmdt body ── */
+    .pmdt-body p {
       font-size: 0.82rem;
       color: var(--mid);
+      flex: 1;
+      min-width: 240px;
     }
 
     /* ── Launch button shown only when the tool is live ── */
@@ -434,22 +413,18 @@
        STREAM COLOURS (one colour per section)
     ════════════════════════════════════════ */
 
-    /* Section 1: PMDT — yellow/amber to match the featured card border */
-    .stream-pmdt .gohrm-section-header { border-left-color: var(--yellow); }
+    /* Section 1: PMDT — yellow/amber circle */
     .stream-pmdt .gohrm-section-num    { background: var(--yellow); color: #1a1a1a; }
 
     /* Section 2: CBR — personnel blue */
-    .stream-cbr .gohrm-section-header { border-left-color: #2c7da0; }
     .stream-cbr .gohrm-section-num    { background: #2c7da0; }
     .stream-cbr .tool-card            { border-top-color: #2c7da0; }
     .stream-cbr .tool-card .tool-num  { color: #2c7da0; }
 
     /* Section 3: L&D — navy */
-    .stream-ld .gohrm-section-header  { border-left-color: #1e3a5f; }
     .stream-ld .gohrm-section-num     { background: #1e3a5f; }
 
     /* Section 4: PMS — maroon */
-    .stream-pms .gohrm-section-header { border-left-color: #8b3a3a; }
     .stream-pms .gohrm-section-num    { background: #8b3a3a; }
     .stream-pms .tool-card            { border-top-color: #8b3a3a; }
     .stream-pms .tool-card .tool-num  { color: #8b3a3a; }
@@ -881,8 +856,8 @@
     // Add is-live class only if the card is clickable
     var cardClass = 'pmdt-card' + (isLive ? ' is-live' : '');
 
-    // Section header row uses the same .gohrm-section-header pattern as sections 2, 3, 4
-    var sectionHeader =
+    // Everything in one dashed box: header and body together
+    document.getElementById('pmdt-card-wrap').innerHTML =
       '<div class="gohrm-section stream-pmdt">' +
         '<div class="gohrm-section-header">' +
           '<div class="gohrm-section-num">' + pmdt.num + '</div>' +
@@ -891,18 +866,11 @@
             '<div class="desc">Start here &middot; Diagnostic Entry Point</div>' +
           '</div>' +
         '</div>' +
-      '</div>';
-
-    // Card body sits below the section header, same as before
-    var cardBody =
-      '<div class="' + cardClass + '">' +
-        '<div style="flex:1;min-width:280px;">' +
+        '<div class="pmdt-body">' +
           '<p>' + pmdt.desc + '</p>' +
+          launchOrTag +
         '</div>' +
-        launchOrTag +
       '</div>';
-
-    document.getElementById('pmdt-card-wrap').innerHTML = sectionHeader + cardBody;
   }
 
   // Kick off rendering of all cards when the page loads
